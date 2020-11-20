@@ -3,30 +3,22 @@ $host = 'localhost';
 $username = 'lab5_user';
 $password = 'password123';
 $dbname = 'world';
-$input = file_get_contents('php://input');
-$searchtag = "countries";
-
-if (strlen($input) >= 6) {
-    if (substr($input, 0, 6) == "cities") {
-        $searchtag = substr($input, 0, 6);
-        $input = substr($input, 6);
-    }
-}
+$country = htmlspecialchars($_GET["country"]);
+$context = htmlspecialchars($_GET["context"]);
 
 $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-if ($searchtag == "countries") {
-    $stmt = $conn->query("SELECT * FROM countries WHERE name LIKE '%$input%'");
+if ($context == "countries") {
+    $stmt = $conn->query("SELECT * FROM countries WHERE name LIKE '%$country%'");
 }
-elseif ($searchtag == "cities") {
-    $stmt = $conn->query("SELECT cities.name, cities.district, cities.population FROM cities JOIN countries ON cities.country_code=countries.code WHERE countries.name LIKE '%$input%'");
+elseif ($context == "cities") {
+    $stmt = $conn->query("SELECT cities.name, cities.district, cities.population FROM cities JOIN countries ON cities.country_code=countries.code WHERE countries.name LIKE '%$country%'");
 }
-
 
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<?php if ($searchtag == "countries"): ?>
+<?php if ($context == "countries"): ?>
 <table>
   <tr>
     <th>Name</th>
@@ -43,7 +35,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </tr>
   <?php endforeach; ?>
 </table>
-<?php elseif ($searchtag == "cities"): ?>
+<?php elseif ($context == "cities"): ?>
 <table>
   <tr>
     <th>Name</th>

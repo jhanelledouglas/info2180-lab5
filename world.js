@@ -2,6 +2,10 @@ var searchBtn2;
 var searchInput;
 var searchBtn;
 var resultss;
+var phpFile = "world.php";
+var getCountry = "?country=";
+var getContext = "&context=";
+
 
 window.onload = function() {
     searchInput = document.getElementById("country");
@@ -12,29 +16,26 @@ window.onload = function() {
     resultss = document.getElementById("result");
 }
 
-function searchBtnCHandler(e) {
-    e.preventDefault();
-    let searchValue = "cities" + searchInput.value.trim();
-    fetch("world.php", {
-            method: 'POST',
-            body: searchValue,
-            headers: {
-                'Content-Type': 'text/plain'
-            }
-        })
-        .then(response => response.text())
-        .then(data => resultss.innerHTML = data);
-}
-
 function searchBtnHandler(e) {
     e.preventDefault();
-    fetch("world.php", {
-            method: 'POST',
-            body: searchInput.value.trim(),
-            headers: {
-                'Content-Type': 'text/plain'
-            }
-        })
-        .then(response => response.text())
-        .then(data => resultss.innerHTML = data);
+    let url = createURL("cities");
+    fetcher(url);
+}
+
+function searchBtnCHandler(e) {
+    e.preventDefault();
+    let url = createURL("countries");
+    fetcher(url);
+}
+
+
+function createURL(contxt) {
+    let country = getCountry + searchInput.value.trim();
+    let context = getContext + contxt;
+    let url = phpFile + country + context;
+    return url;
+}
+
+function fetcher(url) {
+    fetch(url).then(response => response.text()).then(data => resultss.innerHTML = data);
 }

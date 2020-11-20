@@ -1,6 +1,11 @@
 /* Add your own styles */
 
+title {
+    background-color: blue;
+}
+
 body {
+    background-color: lightcyan;
     width: 900px;
     margin: auto;
     -webkit-box-sizing: border-box;
